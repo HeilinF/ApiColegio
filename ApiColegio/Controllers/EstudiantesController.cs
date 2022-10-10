@@ -17,22 +17,27 @@ namespace ApiColegio.Controllers
         }
         // GET: api/<ValuesController>
         [HttpGet]
-        public IEnumerable<Estudiantes> Get()
+        public IEnumerable<Estudiantes> Get() //Hecho
         {
             return context.Estudiantes.ToList();
         }
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Estudiantes Get(int id)
         {
-            return "value";
+            var estudiante = context.Estudiantes.FirstOrDefault(e => e.id_estudiante == id);
+            return estudiante;
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([] string value)
+        public ActionResult Post( Estudiantes estudiantes)  //Hecho
         {
+            context.Estudiantes.Add(estudiantes);
+            context.SaveChanges();
+
+            return Ok();
         }
 
         // PUT api/<ValuesController>/5
