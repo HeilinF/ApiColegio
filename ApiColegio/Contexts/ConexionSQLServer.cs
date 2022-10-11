@@ -10,5 +10,6 @@ namespace ApiColegio.Contexts
 
         }
         public DbSet<Estudiantes> Estudiantes { get; set; } 
+        public DbSet<Cursos> Cursos { get; set; }
     }
 }
