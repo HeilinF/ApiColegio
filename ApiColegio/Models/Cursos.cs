@@ -4,17 +4,27 @@ namespace ApiColegio.Models
 {
     public class Cursos
     {
-      /*  public Cursos()
-        {
-            Estudiantes = new HashSet<Estudiantes>();
-        }
-      */
-       [Key] public int id_curso { get; set; }
+        // public Cursos()
+        //{
+        //  Estudiantes = new HashSet<Estudiantes>();
+        //Materias = new HashSet<Materias>();
+        //}
 
-        [Required] public string nombre { get; set; }
-        public string nivel { get; set;}
-        public char seccion { get; set;}
+        /*   [Key] public int IdCurso { get; set; }
 
-        //public virtual ICollection<Estudiantes>? Estudiantes { get; set; }
+            [Required] public string Nombre { get; set; }
+            public string Nivel { get; set;}
+            public char Seccion { get; set;}
+
+
+            public virtual ICollection<Estudiantes> Estudiantes { get; set; }
+            public virtual ICollection<Materias> Materias { get; set; }
+        } */
+
+
+
+
+
     }
 }
+

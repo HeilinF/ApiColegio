@@ -8,29 +8,26 @@ namespace ApiColegio.Models
 {
     public class Estudiantes
     {
+        public Estudiantes()
+        {
+           Materias= new HashSet<Materias>();
+            var i = Materias;
+        }
+        [Key] public int IdEstudiante { get; set; }
+        public string? Nombre { get; set; }
+        public string? Apellido { get; set; }
+        public DateTime FechaNacimiento { get; set; }
+        public string? Telefono { get; set; }
+        public string? Tutor { get; set; }
 
-        [Key] public int id_estudiante { get; set; }
-        public string? nombre { get; set; }
-        public string? apellido { get; set; }
-        public DateTime fecha_nacimiento { get; set; }
-        public string? telefono { get; set; }
-        public string? tutor { get; set; }
-        public int id_curso { get; set; }
+        public virtual ICollection<Materias> Materias { get; set; }
 
 
 
+        // public int IdCurso { get; set; }
+
+        // public virtual Materias  Curso { get; set; }
 
 
-        /*  public override bool Equals(object? obj)
-          {
-              return obj is Estudiantes estudiantes &&
-                     id_curso == estudiantes.id_curso;
-          }
-
-          public override int GetHashCode()
-          {
-              return HashCode.Combine(id_curso);
-          
-      }*/
     }
 }
