@@ -1,5 +1,5 @@
 using ApiColegio;
-using ApiColegio.Contexts;
+using ApiColegio.Context;
 using Microsoft.EntityFrameworkCore;
 using ServiceStack;
 

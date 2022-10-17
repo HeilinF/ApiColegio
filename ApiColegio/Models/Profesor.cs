@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace ApiColegio.Models
 {
-    public class Profesores
+    public class Profesor
     {
         public int IdProfesor { get; set; }
         public string Nombre { get; set; } = null!;
@@ -11,7 +11,6 @@ namespace ApiColegio.Models
         public DateTime? FechaNacimiento { get; set; }
         public string Telefono { get; set; } = null!;
         public int IdMateria { get; set; }
-
-        public virtual Materias Materia { get; set; } = null!;
+        public virtual Materia Materia { get; set; } = null!;
     }
 }
