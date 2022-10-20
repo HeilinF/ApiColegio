@@ -20,43 +20,43 @@ namespace ApiColegio.Controllers
         }
         // GET: api/<SubjectController>
         [HttpGet]
-        public async Task<IEnumerable<SubjectToListDto>> Get()
+        public  Task<IEnumerable<SubjectToListDto>> Get()
         {
-            var materia = context.Materias.Select(materia => new SubjectToListDto
+            var subject = context.Subjects.Select(subject => new SubjectToListDto
             {
-                Id=materia.IdMateria,
-                Nombre=materia.Nombre,
-                Profesor = materia.Profesor.Nombre +" "+ materia.Profesor.Apellido,
+                Id=subject.IdSubject,
+                Name =subject.Name,
+                Teacher = subject.Teacher.FirstName +" "+ subject.Teacher.LastName,
             }).AsEnumerable();
-            return materia;
+            return Task.FromResult(subject);
         }
 
         // GET api/<SubjectController>/5
         [HttpGet("{id}")]
-        public async Task<IEnumerable<SubjectToListDto>> Get(int id)
+        public  Task<IEnumerable<SubjectToListDto>> Get(int id)
         {
-            var materia = context.Materias.Select(materia => new SubjectToListDto
+            var subject = context.Subjects.Select(materia => new SubjectToListDto
             {
-                Id = materia.IdMateria,
-                Nombre = materia.Nombre,
-                 Profesor= materia.Profesor.Nombre +" "+ materia.Profesor.Apellido,
+                Id = materia.IdSubject,
+                Name = materia.Name,
+                 Teacher = materia.Teacher.FirstName +" "+ materia.Teacher.LastName,
             }).Where(x=>x.Id==id).AsEnumerable();
-            return materia;
+            return Task.FromResult(subject);
         }
 
         // POST api/<SubjectController>
         [HttpPost]
         public async Task<ActionResult<SubjectRegisterDto>> Post([FromBody] SubjectRegisterDto materia)
         {
-            var materiaRegistered = new Materia
+            var materiaRegistered = new Subject
             {
-                Nombre = materia.Nombre,
-                Nivel= materia.Nivel,
-                IdCurso=materia.IdCurso
+                Name = materia.Name,
+               // Level = materia.Level,
+                IdCourse =materia.IdCourse
             };
             try
             {
-                context.Materias.Add(materiaRegistered);
+                context.Subjects.Add(materiaRegistered);
                 await context.SaveChangesAsync();
                 return Ok(materiaRegistered);
             }
@@ -68,31 +68,37 @@ namespace ApiColegio.Controllers
 
         // PUT api/<SubjectController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<SubjectUpdateDto>> Put(int id, [FromBody] SubjectUpdateDto materia)
+        public async Task<ActionResult<SubjectUpdateDto>> Put(int id, [FromBody] SubjectUpdateDto subject)
         {
-            var materiaRegistered = new Materia
-            {   IdMateria=materia.Id,
-                Nombre = materia.Nombre,
-                Nivel= materia.Nivel,
-                IdCurso=materia.IdCurso
-            };
-                context.Materias.Update(materiaRegistered).State = EntityState.Modified;
-            try
+
+            if (id != subject.Id) { return NotFound(); }
+            else
             {
-                await context.SaveChangesAsync();
-                return Ok(materiaRegistered);
-            }
-            catch (Exception)
-            {
-                return BadRequest("No se pudo actualizar la materia");
+                var materiaRegistered = new Subject
+                {
+                    IdSubject = subject.Id,
+                    Name = subject.Name,
+                   // Level = subject.Level,
+                    IdCourse = subject.IdCourse
+                };
+                context.Subjects.Update(materiaRegistered).State = EntityState.Modified;
+                try
+                {
+                    await context.SaveChangesAsync();
+                    return Ok(materiaRegistered);
+                }
+                catch (Exception)
+                {
+                    return BadRequest("No se pudo actualizar la materia");
+                }
             }
         }
 
         // DELETE api/<SubjectController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Materia>> Delete(int id)
+        public async Task<ActionResult<Subject>> Delete(int id)
         {
-            var materia = await context.Materias.FindAsync(id);
+            var materia = await context.Subjects.FindAsync(id);
             if (materia != null)
             {
                 context.Remove(materia);

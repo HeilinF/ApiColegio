@@ -21,72 +21,72 @@ namespace ApiColegio.Controllers
         }
         // GET: api/<StudentController>
         [HttpGet]
-        public async Task<IEnumerable<StudentToListDto>> Get()
+        public Task<IEnumerable<StudentToListDto>> Get()
         {
-            var query = context.Estudiantes
+            var query =  context.Students
                .Select(student => new StudentToListDto
                {
-                   Id = student.IdEstudiante,
-                   Name = student.Nombre + " " + student.Apellido,
-                   Age = (short)Math.Floor((DateTime.Now - student.FechaNacimiento).TotalDays / 365),
-                   PhoneNumber = student.Telefono,
-                   IdCurso=student.IdCurso,
+                   Id = student.IdStudent,
+                   Name = student.LastName + " " + student.LastName,
+                   Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
+                   PhoneNumber = student.PhoneNumber,
+                   Course =student.Course.Name +" "+ student.Course.Section,
 
-                   Grade = student.Curso.Materias.Select(materia=> new SubjectToListDto
+                   Subjects = student.Course.Subjects.Select(subject=> new SubjectToListDto
                    {
-                       Id=materia.IdMateria,
-                       Nombre= materia.Nombre,
+                       Id=subject.IdSubject,
+                       Name= subject.Name,
 
-                       Profesor = materia.Profesor.Nombre +" "+ materia.Profesor.Apellido
+                       Teacher = subject.Teacher.FirstName +" "+ subject.Teacher.LastName
 
                    })
                    
                }).AsEnumerable();
-            return query;
+            return Task.FromResult(query);
             
         }
 
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public  async Task<IEnumerable<StudentToListDto>> Get(int id)
+        public  Task<IEnumerable<StudentToListDto>> Get(int id)
         {
-            var query =  context.Estudiantes
+            var query =  context.Students
                .Select(student => new StudentToListDto
                {
-                   Id = student.IdEstudiante,
-                   Name = student.Nombre + " " + student.Apellido,
-                   Age = (short)Math.Floor((DateTime.Now - student.FechaNacimiento).TotalDays / 365),
-                   PhoneNumber = student.Telefono,
-                   IdCurso= student.IdCurso,
+                   Id = student.IdStudent,
+                   Name = student.FirstName + " " + student.LastName,
+                   Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
+                   PhoneNumber = student.PhoneNumber,
+                   Course = student.Course.Name + " " + student.Course.Section,
 
-                   Grade = student.Curso.Materias.Select(materia => new SubjectToListDto
+                   Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
                    {
-                       Id = materia.IdMateria,
-                       Nombre = materia.Nombre,
+                       Id = subject.IdSubject,
+                       Name = subject.Name,
 
-                       Profesor = materia.Profesor.Nombre + " " + materia.Profesor.Apellido
+                       Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
 
                    })
 
                }).Where(x=>x.Id==id).AsEnumerable();
-            return query;
+            return Task.FromResult(query);
         }
 
         // POST api/<StudentController>
         [HttpPost]
-        public async Task<ActionResult<StudentRegisterDto>> Post([FromBody] StudentRegisterDto estudiante)
+        public async Task<ActionResult<StudentRegisterDto>> Post([FromBody] StudentRegisterDto student)
         {
-            var estudianteRegistered = new Estudiante
+            var estudianteRegistered = new Student
             {
-                Nombre = estudiante.Nombre,
-                Apellido = estudiante.Apellido,
-                FechaNacimiento = estudiante.FechaNacimiento,
-                Telefono =estudiante.Telefono,
-                Tutor= estudiante.Tutor,
-                IdCurso= estudiante.IdCurso,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                Date = student.Date,
+                PhoneNumber =student.PhoneNumber,
+                Tutor= student.Tutor,
+                IdCourse= student.IdCourse,
             };
          
-            context.Estudiantes.Add(estudianteRegistered);
+            context.Students.Add(estudianteRegistered);
 
             try
             {
@@ -102,21 +102,21 @@ namespace ApiColegio.Controllers
         // PUT api/<StudentController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult<StudentUpdateDto>> Put
-            (int id, [FromBody] StudentUpdateDto estudiante)
+            (int id, [FromBody] StudentUpdateDto student)
         {
-            if (id != estudiante.Id)
+            if (id != student.Id)
             {
                 return BadRequest("Los Id no coinciden");
             }
-            var estudianteUpdated = new Estudiante
+            var estudianteUpdated = new Student
             {   
-                IdEstudiante=estudiante.Id,
-                Nombre = estudiante.Nombre,
-                Apellido = estudiante.Apellido,
-                FechaNacimiento = estudiante.FechaNacimiento,
-                Telefono = estudiante.Telefono,
-                Tutor=estudiante.Tutor,
-                IdCurso=estudiante.IdCurso,
+                IdStudent =student.Id,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                Date = student.Date,
+                PhoneNumber = student.PhoneNumber,
+                Tutor= student.Tutor,
+                IdCourse = student.IdCourse,
             };
                   
                 context.Update(estudianteUpdated).State= EntityState.Modified;
@@ -135,9 +135,9 @@ namespace ApiColegio.Controllers
 
         // DELETE api/<StudentController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Estudiante>> Delete(int id)
+        public async Task<ActionResult<Student>> Delete(int id)
         {
-            var estudiante= await context.Estudiantes.FindAsync(id);
+            var estudiante= await context.Students.FindAsync(id);
             if (estudiante != null)
             {
                 context.Remove(estudiante);

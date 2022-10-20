@@ -17,58 +17,51 @@ namespace ApiColegio.Context
         {
         }
 
-        public virtual DbSet<Curso> Cursos { get; set; } = null!;
-        public virtual DbSet<Estudiante> Estudiantes { get; set; } = null!;
-        public virtual DbSet<Materia> Materias { get; set; } = null!;
-        public virtual DbSet<Profesor> Profesores { get; set; } = null!;
+        public virtual DbSet<Course> Courses { get; set; } = null!;
+        public virtual DbSet<Student> Students { get; set; } = null!;
+        public virtual DbSet<Subject> Subjects { get; set; } = null!;
+        public virtual DbSet<Teacher> Teachers { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-               optionsBuilder.UseSqlServer("Server=LAPTOP-O2E6A0VL; Database=Colegio; Trusted_Connection=True;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Curso>(entity =>
+            modelBuilder.Entity<Course>(entity =>
             {
-                entity.HasKey(e => e.IdCurso);
+                entity.HasKey(e => e.IdCourse);
 
-                entity.Property(e => e.IdCurso).HasColumnName("id_curso");
+                entity.Property(e => e.IdCourse).HasColumnName("id_curso");
 
-                entity.Property(e => e.Nombre)
+                entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .HasColumnName("nombre");
 
-                entity.Property(e => e.Seccion)
+                entity.Property(e => e.Section)
                     .HasMaxLength(10)
                     .HasColumnName("seccion")
                     .IsFixedLength();
             });
 
-            modelBuilder.Entity<Estudiante>(entity =>
+            modelBuilder.Entity<Student>(entity =>
             {
-                entity.HasKey(e => e.IdEstudiante);
+                entity.HasKey(e => e.IdStudent);
 
-                entity.Property(e => e.IdEstudiante).HasColumnName("id_estudiante");
+                entity.Property(e => e.IdStudent).HasColumnName("id_estudiante");
 
-                entity.Property(e => e.Apellido)
+                entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .HasColumnName("apellido");
 
-                entity.Property(e => e.FechaNacimiento)
+                entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasColumnName("fecha_nacimiento");
 
-                entity.Property(e => e.IdCurso).HasColumnName("id_curso");
+                entity.Property(e => e.IdCourse).HasColumnName("id_curso");
 
-                entity.Property(e => e.Nombre)
+                entity.Property(e => e.FirstName)
                     .HasMaxLength(50)
                     .HasColumnName("nombre");
 
-                entity.Property(e => e.Telefono)
+                entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(15)
                     .HasColumnName("telefono")
                     .IsFixedLength();
@@ -77,66 +70,66 @@ namespace ApiColegio.Context
                     .HasMaxLength(50)
                     .HasColumnName("tutor");
 
-                entity.HasOne(d => d.Curso)
-                    .WithMany(p => p.Estudiantes)
-                    .HasForeignKey(d => d.IdCurso)
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.Students)
+                    .HasForeignKey(d => d.IdCourse)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Estudiantes_Cursos");
             });
 
-            modelBuilder.Entity<Materia>(entity =>
+            modelBuilder.Entity<Subject>(entity =>
             {
-                entity.HasKey(e => e.IdMateria);
+                entity.HasKey(e => e.IdSubject);
 
-                entity.Property(e => e.IdMateria).HasColumnName("id_materia");
+                entity.Property(e => e.IdSubject).HasColumnName("id_materia");
 
-                entity.Property(e => e.IdCurso).HasColumnName("id_curso");
+                entity.Property(e => e.IdCourse).HasColumnName("id_curso");
 
-                entity.Property(e => e.Nivel).HasMaxLength(255);
+              //  entity.Property(e => e.Level).HasMaxLength(255);
 
-                entity.Property(e => e.Nombre)
+                entity.Property(e => e.Name)
                     .HasMaxLength(15)
                     .HasColumnName("nombre_corto")
                     .IsFixedLength();
 
-                entity.HasOne(d => d.Curso)
-                    .WithMany(p => p.Materias)
-                    .HasForeignKey(d => d.IdCurso)
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.Subjects)
+                    .HasForeignKey(d => d.IdCourse)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Materias_Cursos");
             });
 
-            modelBuilder.Entity<Profesor>(entity =>
+            modelBuilder.Entity<Teacher>(entity =>
             {
-                entity.HasKey(e => e.IdProfesor);
+                entity.HasKey(e => e.IdTeacher);
 
-                entity.HasIndex(e => e.IdMateria, "IX_Profesores")
+                entity.HasIndex(e => e.IdSubject, "IX_Profesores")
                     .IsUnique();
 
-                entity.Property(e => e.IdProfesor).HasColumnName("id_profesor");
+                entity.Property(e => e.IdTeacher).HasColumnName("id_profesor");
 
-                entity.Property(e => e.Apellido)
+                entity.Property(e => e.LastName)
                     .HasMaxLength(50)
                     .HasColumnName("apellido");
 
-                entity.Property(e => e.FechaNacimiento)
+                entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasColumnName("fecha_nacimiento");
 
-                entity.Property(e => e.IdMateria).HasColumnName("id_materia");
+                entity.Property(e => e.IdSubject).HasColumnName("id_materia");
 
-                entity.Property(e => e.Nombre)
+                entity.Property(e => e.FirstName)
                     .HasMaxLength(50)
                     .HasColumnName("nombre");
 
-                entity.Property(e => e.Telefono)
+                entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(15)
                     .HasColumnName("telefono")
                     .IsFixedLength();
 
-                entity.HasOne(d => d.Materia)
-                    .WithOne(p => p.Profesor)
-                    .HasForeignKey<Profesor>(d => d.IdMateria)
+                entity.HasOne(d => d.Subject)
+                    .WithOne(p => p.Teacher)
+                    .HasForeignKey<Teacher>(d => d.IdSubject)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Profesores_Materias");
             });

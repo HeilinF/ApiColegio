@@ -9,8 +9,8 @@ namespace ApiColegio.Dtos.StudentDtos
         public string Name { get; set; } = null!;
         public short Age { get; set; }
         public string? PhoneNumber { get; set; }
-        public int IdCurso { get; set; }
-        public IEnumerable<SubjectToListDto> Grade { get; set; }
+        public string Course { get; set; } = null!;
+        public IEnumerable<SubjectToListDto>? Subjects { get; set; }
 
     }
 }
