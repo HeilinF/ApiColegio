@@ -68,15 +68,17 @@ namespace ApiColegio.Controllers
 
                    })
 
-               }).Where(x=>x.Id==id).AsEnumerable();
+               }).Where(x=>x.Id==id)
+               .AsEnumerable();
             return Task.FromResult(query);
         }
 
         // POST api/<StudentController>
         [HttpPost]
-        public async Task<ActionResult<StudentRegisterDto>> Post([FromBody] StudentRegisterDto student)
+        public async Task<ActionResult<StudentRegisterDto>> Post
+            ([FromBody] StudentRegisterDto student)
         {
-            var estudianteRegistered = new Student
+            var studentRegistered = new Student
             {
                 FirstName = student.FirstName,
                 LastName = student.LastName,
@@ -86,12 +88,12 @@ namespace ApiColegio.Controllers
                 IdCourse= student.IdCourse,
             };
          
-            context.Students.Add(estudianteRegistered);
+            context.Students.Add(studentRegistered);
 
             try
             {
                 await context.SaveChangesAsync();
-                return Ok(estudianteRegistered);
+                return Ok(studentRegistered);
             }
             catch (Exception)
             {
@@ -108,7 +110,7 @@ namespace ApiColegio.Controllers
             {
                 return BadRequest("Los Id no coinciden");
             }
-            var estudianteUpdated = new Student
+            var studentUpdated = new Student
             {   
                 IdStudent =student.Id,
                 FirstName = student.FirstName,
@@ -119,12 +121,12 @@ namespace ApiColegio.Controllers
                 IdCourse = student.IdCourse,
             };
                   
-                context.Update(estudianteUpdated).State= EntityState.Modified;
+                context.Update(studentUpdated).State= EntityState.Modified;
 
                try 
                {
                 await context.SaveChangesAsync();
-                return Ok(estudianteUpdated);
+                return Ok(studentUpdated);
                }
             catch (Exception)
             {
@@ -137,12 +139,12 @@ namespace ApiColegio.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Student>> Delete(int id)
         {
-            var estudiante= await context.Students.FindAsync(id);
-            if (estudiante != null)
+            var student= await context.Students.FindAsync(id);
+            if (student != null)
             {
-                context.Remove(estudiante);
+                context.Remove(student);
                await context.SaveChangesAsync();
-                return Ok(estudiante);
+                return Ok(student);
             }
             else
             {

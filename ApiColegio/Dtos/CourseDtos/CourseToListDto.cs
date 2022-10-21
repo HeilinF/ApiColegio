@@ -8,6 +8,6 @@ namespace ApiColegio.Dtos.CourseDtos
         public string Name { get; set; } = null!;
         public string Section { get; set; } = null!;
 
-           public IEnumerable<string> Subjects { get; set; }
+           public IEnumerable<SubjectToListDto> Subjects { get; set; }
     }
 }

@@ -48,7 +48,8 @@ namespace ApiColegio.Controllers
 
                     Subject = teacher.Subject.Name
 
-                }).Where(x => x.Id == id).AsEnumerable();
+                }).Where(x => x.Id == id)
+                .AsEnumerable();
 
 
             return Task.FromResult(query);
@@ -60,13 +61,10 @@ namespace ApiColegio.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, TeacherUpdateDto teacher)
         {
-            if (id != teacher.Id)
-            {
-                return BadRequest();
-            }
-            // var profesorToUpdate = await context.Profesores.FindAsync(id);
+            if (!TeacherExists(id))  return NotFound();
+            
 
-            var profesorUpdate = new Teacher
+            var teacherUpdated = new Teacher
             {
                 IdTeacher = teacher.Id,
                 FirstName = teacher.FirstName,
@@ -75,15 +73,15 @@ namespace ApiColegio.Controllers
                 IdSubject = teacher.IdSubject,
             };
 
-            context.Update(profesorUpdate).State = EntityState.Modified;
-
             try
-            {
+            { 
+                context.Update(teacherUpdated).State = EntityState.Modified;
                 await context.SaveChangesAsync();
+                return Ok(teacherUpdated);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProfesorExists(id))
+                if (!TeacherExists(id))
                 {
                     return NotFound();
                 }
@@ -92,29 +90,27 @@ namespace ApiColegio.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
         // POST: api/Teacher
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TeacherRegisterDto>> Post(TeacherRegisterDto profesor)
+        public async Task<ActionResult<TeacherRegisterDto>> Post(TeacherRegisterDto teacher)
         {
             try
             {
-                var profesorRegister = new Teacher
+                var teacherRegistered = new Teacher
                 {
                     // IdProfesor = profesor.IdProfesor,
-                    FirstName = profesor.FirstName,
-                    LastName = profesor.LastName,
-                    Date = profesor.Date,
-                    PhoneNumber = profesor.PhoneNumber,
-                    IdSubject = profesor.IdSubject
+                    FirstName = teacher.FirstName,
+                    LastName = teacher.LastName,
+                    Date = teacher.Date,
+                    PhoneNumber = teacher.PhoneNumber,
+                    IdSubject = teacher.IdSubject
                 };
-                context.Teachers.Add(profesorRegister);
+                context.Teachers.Add(teacherRegistered);
                 await context.SaveChangesAsync();
-                return Ok(profesor);
+                return Ok(teacher);
             }
             catch (Exception)
             {
@@ -126,19 +122,19 @@ namespace ApiColegio.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var profesor = await context.Teachers.FindAsync(id);
-            if (profesor == null)
+            var teacher = await context.Teachers.FindAsync(id);
+            if (teacher == null)
             {
                 return NotFound();
             }
 
-            context.Teachers.Remove(profesor);
+            context.Teachers.Remove(teacher);
             await context.SaveChangesAsync();
 
-            return Ok(profesor);
+            return Ok(teacher);
         }
 
-        bool ProfesorExists(int id)
+        bool TeacherExists(int id)
         {
             return context.Teachers.Any(e => e.IdTeacher == id);
         }

@@ -4,8 +4,6 @@ using ApiColegio.Dtos.SubjectDtos;
 using ApiColegio.Models;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace ApiColegio.Controllers
 {
     [Route("api/[controller]")]
@@ -29,13 +27,13 @@ namespace ApiColegio.Controllers
                 Name = course.Name,
                 Section = course.Section,
 
-                /*Subjects = context.Subjects.Select(subject => new SubjectToListDto
+                Subjects = course.Subjects.Select(subject => new SubjectToListDto
                 {
                     Id = subject.IdSubject,
                     Name = subject.Name,
                     Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
-                }).AsEnumerable()*/
-                Subjects= course.Subjects.Select(x=>x.Name)
+                }).AsEnumerable()
+
 
             }).AsEnumerable();
 
@@ -44,27 +42,62 @@ namespace ApiColegio.Controllers
 
         // GET api/<CourseController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Task<IEnumerable<CourseToListDto>> Get(int id)
         {
-            return "value";
+            var query = context.Courses
+                 .Where(x => x.IdCourse == id)
+                .Select(course => new CourseToListDto
+                {
+                    Id = course.IdCourse,
+                    Name = course.Name,
+                    Section = course.Section,
+
+                    Subjects = course.Subjects.Select(subject => new SubjectToListDto
+                    {
+                        Id = subject.IdSubject,
+                        Name = subject.Name,
+                        Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
+                    }).AsEnumerable()
+
+
+                }).AsEnumerable();
+
+            return Task.FromResult(query);
         }
 
         // POST api/<CourseController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CourseRegisterDto>> Post([FromBody]CourseRegisterDto course)
         {
+            var CourseRegistered = new Course
+            {
+                Name = course.Name,
+                Section = course.Section,
+            };
+            try
+            {
+                context.Courses.Add(CourseRegistered);
+               await context.SaveChangesAsync();
+                return Ok(CourseRegistered);
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
         }
 
         // PUT api/<CourseController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
+
         }
 
         // DELETE api/<CourseController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+
         }
     }
 }

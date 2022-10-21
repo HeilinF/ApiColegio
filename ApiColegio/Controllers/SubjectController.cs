@@ -35,30 +35,30 @@ namespace ApiColegio.Controllers
         [HttpGet("{id}")]
         public  Task<IEnumerable<SubjectToListDto>> Get(int id)
         {
-            var subject = context.Subjects.Select(materia => new SubjectToListDto
+            var subject = context.Subjects.Select(subject => new SubjectToListDto
             {
-                Id = materia.IdSubject,
-                Name = materia.Name,
-                 Teacher = materia.Teacher.FirstName +" "+ materia.Teacher.LastName,
+                Id = subject.IdSubject,
+                Name = subject.Name,
+                 Teacher = subject.Teacher.FirstName +" "+ subject.Teacher.LastName,
             }).Where(x=>x.Id==id).AsEnumerable();
             return Task.FromResult(subject);
         }
 
         // POST api/<SubjectController>
         [HttpPost]
-        public async Task<ActionResult<SubjectRegisterDto>> Post([FromBody] SubjectRegisterDto materia)
+        public async Task<ActionResult<SubjectRegisterDto>> Post([FromBody] SubjectRegisterDto subject)
         {
-            var materiaRegistered = new Subject
+            var subjectRegistered = new Subject
             {
-                Name = materia.Name,
+                Name = subject.Name,
                // Level = materia.Level,
-                IdCourse =materia.IdCourse
+                IdCourse =subject.IdCourse
             };
             try
             {
-                context.Subjects.Add(materiaRegistered);
+                context.Subjects.Add(subjectRegistered);
                 await context.SaveChangesAsync();
-                return Ok(materiaRegistered);
+                return Ok(subjectRegistered);
             }
             catch (Exception)
             {
@@ -74,18 +74,18 @@ namespace ApiColegio.Controllers
             if (id != subject.Id) { return NotFound(); }
             else
             {
-                var materiaRegistered = new Subject
+                var subjectUpdated = new Subject
                 {
                     IdSubject = subject.Id,
                     Name = subject.Name,
                    // Level = subject.Level,
                     IdCourse = subject.IdCourse
                 };
-                context.Subjects.Update(materiaRegistered).State = EntityState.Modified;
+                context.Subjects.Update(subjectUpdated).State = EntityState.Modified;
                 try
                 {
                     await context.SaveChangesAsync();
-                    return Ok(materiaRegistered);
+                    return Ok(subjectUpdated);
                 }
                 catch (Exception)
                 {
@@ -98,12 +98,12 @@ namespace ApiColegio.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Subject>> Delete(int id)
         {
-            var materia = await context.Subjects.FindAsync(id);
-            if (materia != null)
+            var subject = await context.Subjects.FindAsync(id);
+            if (subject != null)
             {
-                context.Remove(materia);
+                context.Remove(subject);
                 await context.SaveChangesAsync();
-                return Ok(materia);
+                return Ok(subject);
             }
             else
             {
