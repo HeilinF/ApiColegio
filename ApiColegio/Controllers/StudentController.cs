@@ -27,7 +27,7 @@ namespace ApiColegio.Controllers
                .Select(student => new StudentToListDto
                {
                    Id = student.IdStudent,
-                   Name = student.LastName + " " + student.LastName,
+                   Name = student.FirstName + " " + student.LastName,
                    Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
                    PhoneNumber = student.PhoneNumber,
                    Course =student.Course.Name +" "+ student.Course.Section,

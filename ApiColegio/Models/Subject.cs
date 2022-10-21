@@ -4,11 +4,12 @@ namespace ApiColegio.Models
 {
     public class Subject
     {
-       // public Materia()
-       // {
-          //  Estudiantes= new HashSet<Student>();
-       //     Profesores = new HashSet<Profesor>();
-       // }
+        public Subject()
+        {
+          //  Estudiantes = new HashSet<Student>();
+           // Profesores = new HashSet<Profesor>();
+           Grades= new HashSet<Grade>();
+        }
 
         public int IdSubject { get; set; }
         public string Name { get; set; } = null!;
@@ -17,8 +18,10 @@ namespace ApiColegio.Models
         public virtual Course Course { get; set; }= null!;
 
         public virtual Teacher? Teacher { get; set; }
+
+        public virtual ICollection<Grade> Grades { get; set; }
        // public virtual ICollection<Student> Estudiantes { get;}
 
-
+        
     }
 }

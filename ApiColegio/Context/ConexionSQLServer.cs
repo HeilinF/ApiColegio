@@ -21,6 +21,7 @@ namespace ApiColegio.Context
         public virtual DbSet<Student> Students { get; set; } = null!;
         public virtual DbSet<Subject> Subjects { get; set; } = null!;
         public virtual DbSet<Teacher> Teachers { get; set; } = null!;
+        public virtual DbSet<Grade> Grades { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -132,6 +133,29 @@ namespace ApiColegio.Context
                     .HasForeignKey<Teacher>(d => d.IdSubject)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Profesores_Materias");
+            });
+            modelBuilder.Entity<Grade>(entity =>
+            {
+              //  entity.Property(e => e.IdGrade).HasColumnName("id_nota");
+                entity.Property(e => e.IdSubject).HasColumnName("id_materia");
+                entity.Property(e => e.IdStudent).HasColumnName("id_estudiante");
+                entity.Property(e => e.Qualification).HasColumnName("calificacion");
+
+                entity.HasKey(e => new { e.IdStudent, e.IdSubject})
+                    .HasName("PK_Grades");
+
+                entity.HasOne(d => d.Student)
+                .WithMany(p => p.Grades)
+                .HasForeignKey(d => d.IdStudent)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Grades_Students");
+
+                entity.HasOne(d => d.Subject)
+                .WithMany(p => p.Grades)
+                .HasForeignKey(d => d.IdSubject)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Grades_Subjects");
+                
             });
 
             OnModelCreatingPartial(modelBuilder);
