@@ -2,7 +2,7 @@
 {
     public class Grade
     {
-      //  public int IdGrade { get; set; }
+        //  public int IdGrade { get; set; }
         public int IdStudent { get; set; }
 
         public virtual Student Student { get; set; } = null!;
@@ -11,6 +11,8 @@
 
         public virtual Subject Subject { get; set; } = null!;
 
-        public int Qualification { get; set; }
+        public int FirstPartial { get; set; }
+        public int? SecondPartial { get; set; }
+        public int? ThirdPartial { get; set; }
     }
 }
