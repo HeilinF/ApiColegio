@@ -35,11 +35,12 @@ namespace ApiColegioLocal.Controllers
                 .Where(x => x.IdStudent == student.IdStudent)
                 .Select(subject => new SubjectGradeToListDto
                 {
-                    // Subject = subject.Subject.Name,
+                    Id=subject.IdSubject,
+                     Subject = subject.Subject.Name,
                     // Teacher= subject.Subject.Teacher.FirstName +" "+ subject.Subject.Teacher.LastName,
                     FirstPartial = subject.FirstPartial,
-                    SecondPartial = subject.SecondPartial,
-                    ThirdPartial = subject.ThirdPartial
+                    //SecondPartial = subject.SecondPartial,
+                    //ThirdPartial = subject.ThirdPartial
 
 
                 }).ToList()
@@ -70,8 +71,8 @@ namespace ApiColegioLocal.Controllers
                     Subject = subject.Subject.Name,
                     // Teacher = subject.Subject.Teacher.FirstName + " " + subject.Subject.Teacher.LastName,
                     FirstPartial = subject.FirstPartial,
-                    SecondPartial = subject.SecondPartial,
-                    ThirdPartial = subject.ThirdPartial
+                    //SecondPartial = subject.SecondPartial,
+                    //ThirdPartial = subject.ThirdPartial
 
                 }).ToList()
 
@@ -103,38 +104,38 @@ namespace ApiColegioLocal.Controllers
             }
 
         }
-        [HttpPost("Second")]
-        public async Task<ActionResult<SecondGradeRegisterDto>> Post([FromBody] SecondGradeRegisterDto grade)
-        {
-            var gradeRegistered = context.Grades.Select(grade => new SecondGradeRegisterDto
-            {
-                IdStudent = grade.IdStudent,
-                IdSubject = grade.IdSubject,
-                SecondPartial = grade.SecondPartial,
-            });
+        //[HttpPost("Second")]
+        //public async Task<ActionResult<SecondGradeRegisterDto>> Post([FromBody] SecondGradeRegisterDto grade)
+        //{
+        //    var gradeRegistered = context.Grades.Select(grade => new SecondGradeRegisterDto
+        //    {
+        //        IdStudent = grade.IdStudent,
+        //        IdSubject = grade.IdSubject,
+        //        SecondPartial = grade.SecondPartial,
+        //    });
 
-            try
-            {
-                context.Add(gradeRegistered);
-                await context.SaveChangesAsync();
-                return Ok(grade);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
+        //    try
+        //    {
+        //        context.Add(gradeRegistered);
+        //        await context.SaveChangesAsync();
+        //        return Ok(grade);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest();
+        //    }
 
-        }
+        //}
 
         // PUT api/<GradeController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<SecondGradeRegisterDto>> Put(int id, [FromBody] SecondGradeRegisterDto grade)
+        public async Task<ActionResult<FirstGradeRegisterDto>> Put(int id, [FromBody] FirstGradeRegisterDto grade)
         {
-            var gradeRegistered = context.Grades.Select(grade => new SecondGradeRegisterDto
+            var gradeRegistered = context.Grades.Select(grade => new FirstGradeRegisterDto
             {
                 IdStudent = grade.IdStudent,
                 IdSubject = grade.IdSubject,
-                SecondPartial = grade.SecondPartial
+                FirstPartial = grade.FirstPartial
                 // SecondPartial = grade.SecondPartial,
             });
 
@@ -150,10 +151,10 @@ namespace ApiColegioLocal.Controllers
             }
         }
 
-        // DELETE api/<GradeController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE api/<GradeController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

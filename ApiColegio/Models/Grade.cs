@@ -12,7 +12,7 @@
         public virtual Subject Subject { get; set; } = null!;
 
         public int FirstPartial { get; set; }
-        public int? SecondPartial { get; set; }
-        public int? ThirdPartial { get; set; }
+        //public int? SecondPartial { get; set; }
+        //public int? ThirdPartial { get; set; }
     }
 }

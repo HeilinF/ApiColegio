@@ -139,7 +139,9 @@ namespace ApiColegio.Context
               //  entity.Property(e => e.IdGrade).HasColumnName("id_nota");
                 entity.Property(e => e.IdSubject).HasColumnName("id_materia");
                 entity.Property(e => e.IdStudent).HasColumnName("id_estudiante");
-                entity.Property(e => e.Qualification).HasColumnName("calificacion");
+                entity.Property(e => e.FirstPartial).HasColumnName("calificacion");
+                //entity.Property(e => e.SecondPartial).HasColumnName("segundo_parcial");
+                //entity.Property(e => e.ThirdPartial).HasColumnName("tercer_parcial");
 
                 entity.HasKey(e => new { e.IdStudent, e.IdSubject})
                     .HasName("PK_Grades");

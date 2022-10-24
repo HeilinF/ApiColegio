@@ -10,10 +10,10 @@ namespace ApiColegio.Dtos.GradeDtos
         //
         //public int? ThirdPartial { get; set; }
     }
-    public class SecondGradeRegisterDto
-    {
-        public int IdStudent { get; set; }
-        public int IdSubject { get; set; }
-        public int? SecondPartial { get; set; }
-    }
+    //public class SecondGradeRegisterDto
+    //{
+    //    public int IdStudent { get; set; }
+    //    public int IdSubject { get; set; }
+    //    public int? SecondPartial { get; set; }
+    //}
 }
