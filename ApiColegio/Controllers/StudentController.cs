@@ -2,6 +2,7 @@
 using ApiColegio.Dtos.StudentDtos;
 using ApiColegio.Dtos.SubjectDtos;
 using ApiColegio.Models;
+using ApiColegio.Queries.StudentQueries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,13 +13,18 @@ namespace ApiColegio.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
-    {
+    {   
+        readonly StudentQuery student;
         private readonly ConexionSQLServer context;
 
-        public StudentController(ConexionSQLServer context)
+        public StudentController(ConexionSQLServer context, StudentQuery student)
         {
             this.context = context;
+            this.student = student;
         }
+
+        
+      
         // GET: api/<StudentController>
         [HttpGet]
         public Task<IEnumerable<StudentToListDto>> Get()
@@ -48,29 +54,10 @@ namespace ApiColegio.Controllers
 
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public  Task<IEnumerable<StudentToListDto>> Get(int id)
+        public  IQueryable<StudentToListDto> Get(int id)
         {
-            var query =  context.Students
-               .Select(student => new StudentToListDto
-               {
-                   Id = student.IdStudent,
-                   Name = student.FirstName + " " + student.LastName,
-                   Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
-                   PhoneNumber = student.PhoneNumber,
-                   Course = student.Course.Name + " " + student.Course.Section,
+          return student.ToListbyId(id);       
 
-                   Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
-                   {
-                       Id = subject.IdSubject,
-                       Name = subject.Name,
-
-                       Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
-
-                   })
-
-               }).Where(x=>x.Id==id)
-               .AsEnumerable();
-            return Task.FromResult(query);
         }
 
         // POST api/<StudentController>

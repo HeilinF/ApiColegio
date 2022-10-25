@@ -15,6 +15,7 @@ namespace ApiColegio.Dtos.StudentDtos
         public string Name { get; set; } = null!;
         public string? PhoneNumber { get; set; }
         public double Average { get; set; }
+        public bool Passed { get; set; }
 
         //public double GetAverage(StudentPassedDto student)
         //{
@@ -30,7 +31,7 @@ namespace ApiColegio.Dtos.StudentDtos
     {
         public int IdCourse { get; set; }
             public string Name { get; set; } = null!;
-        public bool Passed { get; set; }
+        
 
         public IEnumerable<StudentPassedDto> Student { get; set; } = null!;
 

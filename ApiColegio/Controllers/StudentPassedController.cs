@@ -2,6 +2,8 @@
 using ApiColegio.Dtos.StudentDtos;
 using ApiColegio.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,7 +20,7 @@ namespace ApiColegio.Controllers
         {
             this.context = context;
         }
-        // GET: api/<StudentPassedController>
+
         [HttpGet]
         public Task<IEnumerable<StudentCoursePassedDto>> Get()
         {
@@ -26,46 +28,83 @@ namespace ApiColegio.Controllers
             {
                 IdCourse = course.IdCourse,
                 Name = course.Name,
-                Passed = IsPassed(),
+                
                 Student= course.Students.Select(student=> new StudentPassedDto
                 {
-                    Name= student.FirstName,
-                    PhoneNumber=student.PhoneNumber,
-                    Average= context.Grades
-                    .Where(x => x.IdStudent
-                    == student.IdStudent).Select(x => x.FirstPartial).
-                    Sum()/(student.Course.Subjects.Count),
 
-                })
+                    Name= student.FirstName +" "+student.LastName,
+                    PhoneNumber=student.PhoneNumber,
+                    Average= context.Grades //Promedio total de los estudiantes
+                    .Where(x => x.IdStudent== student.IdStudent)
+                    .Select(x => x.FirstPartial).
+                    Sum() / (student.Course.Subjects.Count),
+
+                   Passed= context.Grades.Where // Evaluacion por estudiante
+                   (x => x.IdStudent == student.IdStudent)
+                   .All(x => x.FirstPartial >= 6)
+
+                }).Where(x=>x.Passed==true)
 
             }).AsEnumerable();
 
                 return Task.FromResult(Query);
         }
 
-        // GET api/<StudentPassedController>/5
-        [HttpGet("{idCourse}")]
-        public string Get(int idCourse)
+        [HttpGet("{idcourse}")]
+        public Task<IEnumerable<StudentCoursePassedDto>> Get(int idcourse)
         {
-            return "value";
-        }
-        bool IsPassed()
-        {
-            var student = new StudentPassedController(context);
-            if ( student.GetAverage() >= 6)
-                return true;
+            var Query = context.Courses.
+                Where(x=>x.IdCourse==idcourse)
+                .Select(course => new StudentCoursePassedDto
+                {
+                    IdCourse = course.IdCourse,
+                    Name = course.Name,
 
-            else { return false; }
+                    Student = course.Students.Select(student => new StudentPassedDto
+                    {
+
+                        Name = student.FirstName,
+                        PhoneNumber = student.PhoneNumber,
+                        Average = context.Grades
+                        .Where(x => x.IdStudent == student.IdStudent)
+                        .Select(x => x.FirstPartial)
+                        .Sum() / (student.Course.Subjects.Count),
+
+                        Passed = context.Grades
+                        .Where(x => x.IdStudent == student.IdStudent)
+                        .All(x => x.FirstPartial >= 6)
+
+                    }).Where(x => x.Passed == true)
+                }).AsEnumerable();
+
+            return Task.FromResult(Query);
         }
+
+        //bool IsPassed(Student student)
+        //{
+        //    //if (context.Grades.Where
+        //    //    (x=>x.IdSubject==context.Students.First().IdStudent)
+        //    //    .Any(x => x.FirstPartial < 6))
+        //    //{
+        //    //    return false;
+        //    //}
+        //    if(context.Grades.Where(x => x.IdStudent == student.IdStudent).All(x => x.FirstPartial  >=6))
+        //    {
+        //        return true;
+        //    }
+        //    else { return false; }
+ 
+        //}
         
-        double GetAverage()
-        {
-          double Average = context.Grades
-            .Where(x => x.IdStudent
-                 == x.Student.IdStudent).Select(x => x.FirstPartial).Sum() /6;
+        //  double  GetAverage()
+        //{
+            
+        //    double Average = context.Grades
+        //    .Where(x => x.IdStudent
+        //         == context.Students.First().IdStudent).Select(x => x.FirstPartial).Average();
 
-            return Average;
-        }
+        //    return Average;
+        //}
 
 
     }
