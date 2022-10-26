@@ -31,6 +31,9 @@ namespace ApiColegio.Controllers
                 
                 Student= course.Students.Select(student=> new StudentPassedDto
                 {
+                      ///Por agregar mas campos de notas
+                     ///e implementar un average por materia
+                    ///y un average por curso (ya implementado)
 
                     Name= student.FirstName +" "+student.LastName,
                     PhoneNumber=student.PhoneNumber,

@@ -3,6 +3,7 @@ using ApiColegio.Models;
 using ApiColegio.Dtos.SubjectDtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ApiColegio.Requests.SubjectRequest;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,103 +13,74 @@ namespace ApiColegio.Controllers
     [ApiController]
     public class SubjectController : ControllerBase
     {
+        private readonly SubjectRequest subject;
         private readonly ConexionSQLServer context;
 
-        public SubjectController(ConexionSQLServer context)
+        public SubjectController(ConexionSQLServer context, SubjectRequest subject)
         {
+            this.subject = subject;
             this.context = context;
         }
         // GET: api/<SubjectController>
         [HttpGet]
-        public  Task<IEnumerable<SubjectToListDto>> Get()
+        public  IQueryable<SubjectToListDto> Get()
         {
-            var subject = context.Subjects.Select(subject => new SubjectToListDto
-            {
-                Id=subject.IdSubject,
-                Name =subject.Name,
-                Teacher = subject.Teacher.FirstName +" "+ subject.Teacher.LastName,
-            }).AsEnumerable();
-            return Task.FromResult(subject);
+            return subject.ToList();
         }
 
         // GET api/<SubjectController>/5
         [HttpGet("{id}")]
-        public  Task<IEnumerable<SubjectToListDto>> Get(int id)
+        public ActionResult Get(int id)
         {
-            var subject = context.Subjects.Select(subject => new SubjectToListDto
+            if (!subject.Exist(id))
             {
-                Id = subject.IdSubject,
-                Name = subject.Name,
-                 Teacher = subject.Teacher.FirstName +" "+ subject.Teacher.LastName,
-            }).Where(x=>x.Id==id).AsEnumerable();
-            return Task.FromResult(subject);
+                return NotFound("NO se encontro esa materia");
+            }
+            else
+            {
+                return Ok(subject.ToListById(id));
+            }
         }
 
         // POST api/<SubjectController>
         [HttpPost]
-        public async Task<ActionResult<SubjectRegisterDto>> Post([FromBody] SubjectRegisterDto subject)
+        public ActionResult Post([FromBody] SubjectRegisterDto _subject)
         {
-            var subjectRegistered = new Subject
-            {
-                Name = subject.Name,
-               // Level = materia.Level,
-                IdCourse =subject.IdCourse
-            };
             try
             {
-                context.Subjects.Add(subjectRegistered);
-                await context.SaveChangesAsync();
-                return Ok(subjectRegistered);
+                subject.Create(_subject);
+                return Ok(_subject);
             }
-            catch (Exception)
+            catch(DbUpdateConcurrencyException ex)
             {
-                return BadRequest("No se pudo registrar la materia");
+                return BadRequest(ex.Message + ex.InnerException);
             }
         }
 
         // PUT api/<SubjectController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<SubjectUpdateDto>> Put(int id, [FromBody] SubjectUpdateDto subject)
+        public ActionResult Put(int id, [FromBody] SubjectUpdateDto _subject)
         {
-
-            if (id != subject.Id) { return NotFound(); }
-            else
+            if (_subject.Id != id)
+                return NotFound("Los Id No Coinciden");
+            try
+            { 
+                subject.Update(_subject);
+                return Ok(_subject);
+            }
+            catch(DbUpdateConcurrencyException ex)
             {
-                var subjectUpdated = new Subject
-                {
-                    IdSubject = subject.Id,
-                    Name = subject.Name,
-                   // Level = subject.Level,
-                    IdCourse = subject.IdCourse
-                };
-                context.Subjects.Update(subjectUpdated).State = EntityState.Modified;
-                try
-                {
-                    await context.SaveChangesAsync();
-                    return Ok(subjectUpdated);
-                }
-                catch (Exception)
-                {
-                    return BadRequest("No se pudo actualizar la materia");
-                }
+                return BadRequest(ex.Message + ex.InnerException);
             }
         }
 
         // DELETE api/<SubjectController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Subject>> Delete(int id)
+        public void Delete(int id)
         {
-            var subject = await context.Subjects.FindAsync(id);
-            if (subject != null)
-            {
-                context.Remove(subject);
-                await context.SaveChangesAsync();
-                return Ok(subject);
-            }
-            else
-            {
-                return NotFound();
-            }
+            subject.Delete(id);
         }
+
+
     }
 }

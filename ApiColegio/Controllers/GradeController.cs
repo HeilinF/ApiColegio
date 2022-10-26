@@ -131,13 +131,13 @@ namespace ApiColegioLocal.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<FirstGradeRegisterDto>> Put(int id, [FromBody] FirstGradeRegisterDto grade)
         {
-            var gradeRegistered = context.Grades.Select(grade => new FirstGradeRegisterDto
+            var gradeRegistered = new Grade
             {
                 IdStudent = grade.IdStudent,
                 IdSubject = grade.IdSubject,
                 FirstPartial = grade.FirstPartial
                 // SecondPartial = grade.SecondPartial,
-            });
+            };
 
             try
             {
