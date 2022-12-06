@@ -25,5 +25,11 @@ namespace ApiColegio.Models
      // public virtual ICollection<Subject> Materias { get;}
 
         public virtual ICollection<Grade> Grades { get; set; }
+
+        public virtual short Age => (short)Math.Floor((DateTime.Now - Date).TotalDays / 365);
+
+
+
+
     }
 }
