@@ -1,12 +1,12 @@
-﻿using ApiColegio.Models;
-using ApiColegio.Context;
-using ApiColegio.Dtos.GradeDtos;
+﻿using ApiColegio.Dtos.GradeDtos;
+using Domain.Context;
+using Domain.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ApiColegioLocal.Controllers
+namespace ApiColegio.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -25,18 +25,18 @@ namespace ApiColegioLocal.Controllers
 
             var query = context.Students.Select(student => new StudentGradeToListDto
             {
-                Id = student.IdStudent,
+                Id = student.Id,
                 Name = student.FirstName + " " + student.LastName,
                 // Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
                 PhoneNumber = student.PhoneNumber,
                 Course = student.Course.Name + " " + student.Course.Section,
 
                 Record = context.Grades
-                .Where(x => x.IdStudent == student.IdStudent)
+                .Where(x => x.IdStudent == student.Id)
                 .Select(subject => new SubjectGradeToListDto
                 {
-                    Id=subject.IdSubject,
-                     Subject = subject.Subject.Name,
+                    Id = subject.IdSubject,
+                    Subject = subject.Subject.Name,
                     // Teacher= subject.Subject.Teacher.FirstName +" "+ subject.Subject.Teacher.LastName,
                     FirstPartial = subject.FirstPartial,
                     //SecondPartial = subject.SecondPartial,
@@ -58,14 +58,14 @@ namespace ApiColegioLocal.Controllers
 
             var query = context.Students.Select(student => new StudentGradeToListDto
             {
-                Id = student.IdStudent,
+                Id = student.Id,
                 Name = student.FirstName + " " + student.LastName,
                 // Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
                 PhoneNumber = student.PhoneNumber,
                 Course = student.Course.Name + " " + student.Course.Section,
 
                 Record = context.Grades
-                .Where(x => x.IdStudent == student.IdStudent)
+                .Where(x => x.IdStudent == student.Id)
                 .Select(subject => new SubjectGradeToListDto
                 {
                     Subject = subject.Subject.Name,

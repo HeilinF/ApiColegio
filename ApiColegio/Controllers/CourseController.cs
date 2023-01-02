@@ -1,7 +1,8 @@
-﻿using ApiColegio.Context;
+﻿
 using ApiColegio.Dtos.CourseDtos;
 using ApiColegio.Dtos.SubjectDtos;
-using ApiColegio.Models;
+using Domain.Context;
+using Domain.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiColegio.Controllers
@@ -23,13 +24,13 @@ namespace ApiColegio.Controllers
         {
             var query = context.Courses.Select(course => new CourseToListDto
             {
-                Id = course.IdCourse,
+                Id = course.Id,
                 Name = course.Name,
                 Section = course.Section,
 
                 Subjects = course.Subjects.Select(subject => new SubjectToListDto
                 {
-                    Id = subject.IdSubject,
+                    Id = subject.Id,
                     Name = subject.Name,
                     Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
                 }).AsEnumerable()
@@ -45,16 +46,16 @@ namespace ApiColegio.Controllers
         public Task<IEnumerable<CourseToListDto>> Get(int id)
         {
             var query = context.Courses
-                 .Where(x => x.IdCourse == id)
+                 .Where(x => x.Id == id)
                 .Select(course => new CourseToListDto
                 {
-                    Id = course.IdCourse,
+                    Id = course.Id,
                     Name = course.Name,
                     Section = course.Section,
 
                     Subjects = course.Subjects.Select(subject => new SubjectToListDto
                     {
-                        Id = subject.IdSubject,
+                        Id = subject.Id,
                         Name = subject.Name,
                         Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
                     }).AsEnumerable()

@@ -1,6 +1,7 @@
-﻿using ApiColegio.Context;
+﻿
 using ApiColegio.Dtos.SubjectDtos;
-using ApiColegio.Models;
+using Domain.Context;
+using Domain.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ namespace ApiColegio.Requests.SubjectRequest
         {
             var Query = context.Subjects.Select(subject => new SubjectToListDto
             {
-                Id = subject.IdSubject,
+                Id = subject.Id,
                 Name = subject.Name,
                 Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName,
             }).AsQueryable();
@@ -30,7 +31,7 @@ namespace ApiColegio.Requests.SubjectRequest
         {
             var Query = context.Subjects.Select(subject => new SubjectToListDto
             {
-                Id = subject.IdSubject,
+                Id = subject.Id,
                 Name = subject.Name,
                 Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName,
             }).Where(x => x.Id == id)
@@ -57,7 +58,7 @@ namespace ApiColegio.Requests.SubjectRequest
 
             var subjectUpdated = new Subject
             {
-                IdSubject = subject.Id,
+                Id = subject.Id,
                 Name = subject.Name,
                 // Level = subject.Level,
                 IdCourse = subject.IdCourse
@@ -81,7 +82,7 @@ namespace ApiColegio.Requests.SubjectRequest
 
         public bool Exist(int id)
         {
-            return context.Subjects.Any(x => x.IdSubject == id);
+            return context.Subjects.Any(x => x.Id == id);
         }
     }
 }

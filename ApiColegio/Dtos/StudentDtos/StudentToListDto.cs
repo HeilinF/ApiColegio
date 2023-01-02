@@ -1,5 +1,4 @@
 ﻿using ApiColegio.Dtos.SubjectDtos;
-using ApiColegio.Models;
 
 namespace ApiColegio.Dtos.StudentDtos
 {

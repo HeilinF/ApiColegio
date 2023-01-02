@@ -1,7 +1,9 @@
-using ApiColegio.Context;
 using ApiColegio.Requests.StudentRequest;
 using ApiColegio.Requests.SubjectRequest;
 using ApiColegio.Requests.TeacherRequest;
+using Domain.Context;
+using Domain.Interface.Repository.Common;
+using Infraestructure.Repository.StudentRepository;
 using Microsoft.EntityFrameworkCore;
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -16,12 +18,14 @@ services.AddControllers();
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
+services.AddAutoMapper(typeof(Program));
 
 services.AddDbContext<ConexionSQLServer>(options => options
 .UseSqlServer(builder.Configuration
-.GetConnectionString("CadenaConexionSQLServer")));
+.GetConnectionString("CadenaConexionSQLServer"), b => b.MigrationsAssembly("ApiColegio")));
 
 // Use DI to inyect the Services that you need 
+services.AddTransient<IStudentRepository, StudentRepository>();
 services.AddScoped<StudentRequest>();
 services.AddScoped<TeacherRequest>();
 services.AddScoped<SubjectRequest>();

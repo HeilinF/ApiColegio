@@ -1,8 +1,9 @@
-﻿using ApiColegio.Context;
-using ApiColegio.Dtos.StudentDtos;
+﻿using ApiColegio.Dtos.StudentDtos;
 using ApiColegio.Dtos.SubjectDtos;
-using ApiColegio.Models;
-using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
+using Domain.Context;
+using Domain.Entities.Models;
+using Domain.Interface.Repository.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiColegio.Requests.StudentRequest
@@ -10,36 +11,44 @@ namespace ApiColegio.Requests.StudentRequest
     public class StudentRequest
     {
         private readonly ConexionSQLServer context;
+        private readonly IMapper _mapper;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentRequest(ConexionSQLServer context)
+        public StudentRequest(ConexionSQLServer context, IMapper mapper, IStudentRepository studentRepository)
         {
             this.context = context;
+            _mapper = mapper;
+            _studentRepository = studentRepository;
         }
 
-        public IQueryable<StudentToListDto> ToListbyId(int id)
+        public async Task<StudentToListDto> ToListbyId(int id)
         {
             //if(!StudentExist(id)) {}
-            var Query = context.Students
-            .Select(student => new StudentToListDto
-            {
-                Id = student.IdStudent,
-                Name = student.FirstName + " " + student.LastName,
-                Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
-                PhoneNumber = student.PhoneNumber,
-                Course = student.Course.Name + " " + student.Course.Section,
+            //var Query = context.Students
+            //.Select(student => new StudentToListDto
+            //{
+            //    Id = student.IdStudent,
+            //    Name = student.FirstName + " " + student.LastName,
+            //    Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
+            //    PhoneNumber = student.PhoneNumber,
+            //    Course = student.Course.Name + " " + student.Course.Section,
 
-                Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
-                {
-                    Id = subject.IdSubject,
-                    Name = subject.Name,
+            //    Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
+            //    {
+            //        Id = subject.IdSubject,
+            //        Name = subject.Name,
 
-                    Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
+            //        Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
 
-                })
+            //    })
 
-            }).Where(x => x.Id == id)
-            .AsQueryable();
-            return Query;
+            //}).Where(x => x.Id == id)
+            //.AsQueryable();
+
+            var Query = await _studentRepository.GetByIdAync(id);
+
+            var studentMapped =  _mapper.Map<StudentToListDto>(Query);
+            return studentMapped;
         }
      
         public IQueryable<StudentToListDto> ToList()
@@ -47,7 +56,7 @@ namespace ApiColegio.Requests.StudentRequest
             var Query = context.Students
                .Select(student => new StudentToListDto
                {
-                   Id = student.IdStudent,
+                   Id = student.Id,
                    Name = student.FirstName + " " + student.LastName,
                    Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
                    PhoneNumber = student.PhoneNumber,
@@ -55,7 +64,7 @@ namespace ApiColegio.Requests.StudentRequest
 
                    Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
                    {
-                       Id = subject.IdSubject,
+                       Id = subject.Id,
                        Name = subject.Name,
 
                        Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
@@ -89,7 +98,7 @@ namespace ApiColegio.Requests.StudentRequest
 
             var studentUpdated = new Student
             {
-                IdStudent = student.Id,
+                Id = student.Id,
                 FirstName = student.FirstName,
                 LastName = student.LastName,
                 Date = student.Date,
@@ -126,7 +135,7 @@ namespace ApiColegio.Requests.StudentRequest
 
         public bool Exist(int id)
         { 
-            return context.Students.Any(x => x.IdStudent == id); 
+            return context.Students.Any(x => x.Id == id); 
         }
     }
 }

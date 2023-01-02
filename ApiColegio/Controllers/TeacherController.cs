@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiColegio.Dtos.TeacherDtos;
-using ApiColegio.Context;
 using ApiColegio.Requests.TeacherRequest;
 
 // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

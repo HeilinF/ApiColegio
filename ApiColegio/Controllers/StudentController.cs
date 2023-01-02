@@ -1,10 +1,6 @@
-﻿using ApiColegio.Context;
-using ApiColegio.Dtos.StudentDtos;
-using ApiColegio.Dtos.SubjectDtos;
-using ApiColegio.Models;
+﻿using ApiColegio.Dtos.StudentDtos;
 using ApiColegio.Requests.StudentRequest;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,13 +29,9 @@ namespace ApiColegio.Controllers
 
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public  ActionResult<IQueryable<StudentToListDto>> Get(int id)
-        {
-          if (!student.Exist(id)) { return NotFound("No hay un estudiante regristrado con ese Id"); }
+        public  async Task<ActionResult<StudentToListDto>> Get(int id) => await student.ToListbyId(id);
 
-          return Ok(student.ToListbyId(id));
-
-        }
+        //if (!student.Exist(id)) { return NotFound("No hay un estudiante regristrado con ese Id"); }
 
         // POST api/<StudentController>
         [HttpPost]

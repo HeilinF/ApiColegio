@@ -1,6 +1,4 @@
-﻿using ApiColegio.Models;
-
-namespace ApiColegio.Dtos.GradeDtos
+﻿namespace ApiColegio.Dtos.GradeDtos
 {
     public class FirstGradeRegisterDto
     {

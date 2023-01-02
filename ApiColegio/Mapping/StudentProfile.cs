@@ -1,28 +1,18 @@
 ﻿using ApiColegio.Dtos.StudentDtos;
-using ApiColegio.Models;
 using AutoMapper;
+using Domain.Entities.Models;
 
 namespace ApiColegio.Mapping
 {
     public class StudentProfile: AutoMapper.Profile
     {
-        public readonly IMapper _mapper;
-        public StudentProfile(IMapper mapper)
+        public StudentProfile()
         {
-            _mapper = mapper;
 
             CreateMap<Student, StudentToListDto>()
                 .ForMember(x => x.Age, s => s.MapFrom(x => x.Age))
-                .ReverseMap() ;
+                .ForMember(x => x.Name, s => s.MapFrom(x => x.NameBuilder()));
 
-        }
-
-      
-      public void q()
-        {
-
-            var e = new Student() { };
-            _mapper.Map<Student, StudentToListDto>(e);
         }
     }
 

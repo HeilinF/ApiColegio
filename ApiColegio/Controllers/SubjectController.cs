@@ -1,9 +1,8 @@
-﻿using ApiColegio.Context;
-using ApiColegio.Models;
-using ApiColegio.Dtos.SubjectDtos;
+﻿using ApiColegio.Dtos.SubjectDtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiColegio.Requests.SubjectRequest;
+using Domain.Context;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

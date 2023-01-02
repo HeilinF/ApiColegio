@@ -1,7 +1,6 @@
-﻿using ApiColegio.Context;
-using ApiColegio.Dtos.TeacherDtos;
-using ApiColegio.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using ApiColegio.Dtos.TeacherDtos;
+using Domain.Context;
+using Domain.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiColegio.Requests.TeacherRequest
@@ -20,7 +19,7 @@ namespace ApiColegio.Requests.TeacherRequest
             var Query = context.Teachers
                 .Select(teacher => new TeacherToListDto
                 {
-                    Id = teacher.IdTeacher,
+                    Id = teacher.Id,
                     Name = teacher.FirstName + " " + teacher.LastName,
                     PhoneNumber = teacher.PhoneNumber,
 
@@ -35,7 +34,7 @@ namespace ApiColegio.Requests.TeacherRequest
             var Query = context.Teachers.Select(
                 teacher => new TeacherToListDto
                 {
-                    Id = teacher.IdTeacher,
+                    Id = teacher.Id,
                     Name = teacher.FirstName + " " + teacher.LastName,
                     PhoneNumber = teacher.PhoneNumber,
 
@@ -53,7 +52,7 @@ namespace ApiColegio.Requests.TeacherRequest
         {
             var teacherUpdated = new Teacher
             {
-                IdTeacher = teacher.Id,
+                Id = teacher.Id,
                 FirstName = teacher.FirstName,
                 LastName = teacher.LastName,
                 PhoneNumber = teacher.PhoneNumber,
@@ -100,7 +99,7 @@ namespace ApiColegio.Requests.TeacherRequest
 
         public bool Exists(int id)
         {
-            return context.Teachers.Any(e => e.IdTeacher == id);
+            return context.Teachers.Any(e => e.Id == id);
         }
     }
 }

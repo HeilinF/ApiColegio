@@ -1,5 +1,4 @@
-﻿using ApiColegio.Context;
-using ApiColegio.Models;
+﻿
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Data.SqlClient;
 using System.Linq;
