@@ -2,18 +2,20 @@
 using Domain.Context;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiColegio.Controllers
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace ApiColegio.Controllers.StudentController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentNonPassedController:ControllerBase
+    public class StudentPassedController : ControllerBase
     {
         private readonly ConexionSQLServer context;
-        public StudentNonPassedController(ConexionSQLServer context)
-        {
-            this.context= context;
-        }
 
+        public StudentPassedController(ConexionSQLServer context)
+        {
+            this.context = context;
+        }
 
         [HttpGet]
         public Task<IEnumerable<StudentCoursePassedDto>> Get()
@@ -25,26 +27,28 @@ namespace ApiColegio.Controllers
 
                 Student = course.Students.Select(student => new StudentPassedDto
                 {
+                    ///Por agregar mas campos de notas
+                    ///e implementar un average por materia
+                    ///y un average por curso (ya implementado)
 
                     Name = student.FirstName + " " + student.LastName,
                     PhoneNumber = student.PhoneNumber,
                     Average = context.Grades //Promedio total de los estudiantes
                     .Where(x => x.IdStudent == student.Id)
                     .Select(x => x.FirstPartial).
-                    Sum() / (student.Course.Subjects.Count),
+                    Sum() / student.Course.Subjects.Count,
 
                     Passed = context.Grades.Where // Evaluacion por estudiante
-                    (x => x.IdStudent == student.Id)
+                   (x => x.IdStudent == student.Id)
                    .All(x => x.FirstPartial >= 6)
 
-                }).Where(x => x.Passed == false)
+                }).Where(x => x.Passed == true)
 
             }).AsEnumerable();
 
             return Task.FromResult(Query);
         }
 
-        // GET api/<StudentPassedController>/5
         [HttpGet("{idcourse}")]
         public Task<IEnumerable<StudentCoursePassedDto>> Get(int idcourse)
         {
@@ -63,20 +67,44 @@ namespace ApiColegio.Controllers
                         Average = context.Grades
                         .Where(x => x.IdStudent == student.Id)
                         .Select(x => x.FirstPartial)
-                        .Sum() / (student.Course.Subjects.Count),
+                        .Sum() / student.Course.Subjects.Count,
 
                         Passed = context.Grades
                         .Where(x => x.IdStudent == student.Id)
                         .All(x => x.FirstPartial >= 6)
 
-                    }).Where(x => x.Passed == false)
+                    }).Where(x => x.Passed == true)
                 }).AsEnumerable();
 
             return Task.FromResult(Query);
         }
 
+        //bool IsPassed(Student student)
+        //{
+        //    //if (context.Grades.Where
+        //    //    (x=>x.IdSubject==context.Students.First().IdStudent)
+        //    //    .Any(x => x.FirstPartial < 6))
+        //    //{
+        //    //    return false;
+        //    //}
+        //    if(context.Grades.Where(x => x.IdStudent == student.IdStudent).All(x => x.FirstPartial  >=6))
+        //    {
+        //        return true;
+        //    }
+        //    else { return false; }
+
+        //}
+
+        //  double  GetAverage()
+        //{
+
+        //    double Average = context.Grades
+        //    .Where(x => x.IdStudent
+        //         == context.Students.First().IdStudent).Select(x => x.FirstPartial).Average();
+
+        //    return Average;
+        //}
+
+
     }
-
-
-
 }

@@ -1,7 +1,13 @@
 ﻿using ApiColegio.Dtos.SubjectDtos;
 
-namespace ApiColegio.Dtos.CourseDtos
+namespace Application.Dtos.CourseDtos
 {
+    public class CourseResponse
+    {
+        public string Name { get; set; } 
+        public string Section { get; set; }
+    }
+
     public class CourseToListDto
     {
         public int Id { get; set; }

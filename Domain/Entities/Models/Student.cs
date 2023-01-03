@@ -34,7 +34,7 @@ namespace Domain.Entities.Models
 
         public virtual short Age => (short)Math.Floor((DateTime.Now - Date).TotalDays / 365);
 
-        public string NameBuilder()
+        public virtual string NameBuilder()
         {
             var Name = new StringBuilder();
             Name.Append(FirstName);

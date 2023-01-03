@@ -2,7 +2,6 @@
 using ApiColegio.Dtos.SubjectDtos;
 using Domain.Context;
 using Domain.Entities.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiColegio.Requests.SubjectRequest

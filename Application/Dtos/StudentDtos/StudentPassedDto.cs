@@ -1,6 +1,4 @@
 ﻿
-using Microsoft.AspNetCore.Mvc.Localization;
-using Microsoft.Data.SqlClient;
 using System.Linq;
 
 namespace ApiColegio.Dtos.StudentDtos
