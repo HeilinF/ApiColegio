@@ -6,7 +6,7 @@ using Domain.Context;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ApiColegio.Controllers
+namespace ApiColegio.Controllers.Subject
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -22,7 +22,7 @@ namespace ApiColegio.Controllers
         }
         // GET: api/<SubjectController>
         [HttpGet]
-        public  IQueryable<SubjectToListDto> Get()
+        public IQueryable<SubjectToListDto> Get()
         {
             return subject.ToList();
         }
@@ -50,7 +50,7 @@ namespace ApiColegio.Controllers
                 subject.Create(_subject);
                 return Ok(_subject);
             }
-            catch(DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException ex)
             {
                 return BadRequest(ex.Message + ex.InnerException);
             }
@@ -63,11 +63,11 @@ namespace ApiColegio.Controllers
             if (_subject.Id != id)
                 return NotFound("Los Id No Coinciden");
             try
-            { 
+            {
                 subject.Update(_subject);
                 return Ok(_subject);
             }
-            catch(DbUpdateConcurrencyException ex)
+            catch (DbUpdateConcurrencyException ex)
             {
                 return BadRequest(ex.Message + ex.InnerException);
             }

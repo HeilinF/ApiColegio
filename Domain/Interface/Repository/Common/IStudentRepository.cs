@@ -8,5 +8,6 @@ using System.Threading.Tasks;
 namespace Domain.Interface.Repository.Common;
 public interface IStudentRepository : IRepositoryAsync<Student>
 {
+    Task<Student> GetByIdAndInclude(int id);
 }
 

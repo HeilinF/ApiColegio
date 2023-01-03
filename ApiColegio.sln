@@ -10,7 +10,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiColegio", "ApiColegio\Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{3CE12301-97E6-4A19-B66A-8C47AA69430D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infraestructure", "Infraestructure\Infraestructure.csproj", "{25545606-70A4-491B-BA4B-3D2ED3F16520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infraestructure", "Infraestructure\Infraestructure.csproj", "{25545606-70A4-491B-BA4B-3D2ED3F16520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{0F61280D-E14A-4CC0-8A73-19A6289E6D5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,10 @@ Global
 		{25545606-70A4-491B-BA4B-3D2ED3F16520}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25545606-70A4-491B-BA4B-3D2ED3F16520}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25545606-70A4-491B-BA4B-3D2ED3F16520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F61280D-E14A-4CC0-8A73-19A6289E6D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F61280D-E14A-4CC0-8A73-19A6289E6D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F61280D-E14A-4CC0-8A73-19A6289E6D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F61280D-E14A-4CC0-8A73-19A6289E6D5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

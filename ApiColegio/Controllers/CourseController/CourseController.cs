@@ -1,11 +1,11 @@
-﻿
-using ApiColegio.Dtos.CourseDtos;
+﻿using ApiColegio.Dtos.CourseDtos;
 using ApiColegio.Dtos.SubjectDtos;
+using Application.Dtos.CourseDtos;
 using Domain.Context;
 using Domain.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApiColegio.Controllers
+namespace ApiColegio.Controllers.CourseController
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -68,7 +68,7 @@ namespace ApiColegio.Controllers
 
         // POST api/<CourseController>
         [HttpPost]
-        public async Task<ActionResult<CourseRegisterDto>> Post([FromBody]CourseRegisterDto course)
+        public async Task<ActionResult<CourseRegisterDto>> Post([FromBody] CourseRegisterDto course)
         {
             var CourseRegistered = new Course
             {
@@ -78,10 +78,10 @@ namespace ApiColegio.Controllers
             try
             {
                 context.Courses.Add(CourseRegistered);
-               await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return Ok(CourseRegistered);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest();
             }

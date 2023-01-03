@@ -1,5 +1,6 @@
 ﻿using ApiColegio.Dtos.StudentDtos;
 using ApiColegio.Dtos.SubjectDtos;
+using Application.Dtos.StudentDtos;
 using AutoMapper;
 using Domain.Context;
 using Domain.Entities.Models;
@@ -21,7 +22,7 @@ namespace ApiColegio.Requests.StudentRequest
             _studentRepository = studentRepository;
         }
 
-        public async Task<StudentToListDto> ToListbyId(int id)
+        public async Task<StudentResponse> ToListbyId(int id)
         {
             //if(!StudentExist(id)) {}
             //var Query = context.Students
@@ -45,31 +46,31 @@ namespace ApiColegio.Requests.StudentRequest
             //}).Where(x => x.Id == id)
             //.AsQueryable();
 
-            var Query = await _studentRepository.GetByIdAync(id);
+            var Query = await _studentRepository.GetByIdAndInclude(id);
 
-            var studentMapped =  _mapper.Map<StudentToListDto>(Query);
+            var studentMapped =  _mapper.Map<StudentResponse>(Query);
             return studentMapped;
         }
      
-        public IQueryable<StudentToListDto> ToList()
+        public IQueryable<StudentResponse> ToList()
         {
             var Query = context.Students
-               .Select(student => new StudentToListDto
+               .Select(student => new StudentResponse
                {
-                   Id = student.Id,
+                   StudentId = student.Id,
                    Name = student.FirstName + " " + student.LastName,
                    Age = (short)Math.Floor((DateTime.Now - student.Date).TotalDays / 365),
                    PhoneNumber = student.PhoneNumber,
-                   Course = student.Course.Name + " " + student.Course.Section,
+                  // Course = student.Course.Name + " " + student.Course.Section,
 
-                   Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
-                   {
-                       Id = subject.Id,
-                       Name = subject.Name,
+                   //Subjects = student.Course.Subjects.Select(subject => new SubjectToListDto
+                   //{
+                   //    Id = subject.Id,
+                   //    Name = subject.Name,
 
-                       Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
+                   //    Teacher = subject.Teacher.FirstName + " " + subject.Teacher.LastName
 
-                   })
+                   //})
 
                }).AsQueryable();
             return Query;
